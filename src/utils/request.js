@@ -8,7 +8,8 @@ const instance = axios.create({
     baseURL: process.env.NODE_ENV === 'production' ? '' : '/api'   //根据自己配置的反向代理去设置不同环境的baeUrl
 })
 // 文档中的统一设置post请求头。下面会说到post请求的几种'Content-Type'
-instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+instance.defaults.headers.post['Content-Type'] = 'application/json'
+
 
 let httpCode = {
     400: '请求参数错误',
@@ -23,7 +24,8 @@ let httpCode = {
 
 /** 请求拦截器 **/
 instance.interceptors.request.use(config => {
-    config.headers['token'] = sessionStorage.getItem('token') || ''
+    config.headers['Authorization'] ='JWT '+ sessionStorage.getItem('token') || ''
+    config.headers['withCredentials'] = true
     // message.loading('',0)
     // 我这里是文件上传，发送的是二进制流，所以需要设置请求头的'Content-Type'
     if (config.url.includes('pur/contract/upload')) {
@@ -50,6 +52,7 @@ instance.interceptors.response.use(response => {
         let tips = error.response.status in httpCode ? httpCode[error.response.status] : error.response.data.message
         message.error(tips)
         if (error.response.status === 401) {
+            sessionStorage.clear()
             router.push({
                 path: `/login`
             })

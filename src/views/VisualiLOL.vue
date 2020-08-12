@@ -2,6 +2,30 @@
     <div class="warp">
         <div class="commandBar">
             <div>
+                <label class="classification">功能选择:
+                    <a-select
+                            class="selector"
+                            :value="funcName"
+                            @change="handlefuncNameChange"
+                    >
+                        <a-select-option v-for="levelOneTags in funcMenu" :key="levelOneTags.value">
+                            {{ levelOneTags.name }}
+                        </a-select-option>
+                    </a-select>
+                </label>
+            </div>
+            <div>
+                <label>起止日期：
+                    <a-range-picker
+                            class="input"
+                            :format="dateFormat"
+                            :default-value="defaultPicker"
+                            :disabled-date="disabledDate"
+                            @change="handlePicker"
+                    />
+                </label>
+            </div>
+            <div v-if="funcName === 'topicCate'">
                 <label class="classification">一级分类:
                     <a-select
                             class="selector"
@@ -48,70 +72,130 @@
                     </a-select>
                 </label>
             </div>
-            <label>起止日期：
-                <a-range-picker
-                        class="input"
-                        :format="dateFormat"
-                        :default-value="defaultPicker"
-                        :disabled-date="disabledDate"
-                        @change="handlePicker"
-                />
-            </label>
-            <label>事件列表:
-                <a-select
-                        class="selector"
-                        :max-tag-count=1
-                        :max-tag-text-length="5"
-                        max-tag-placeholder="+"
-                        :value="eventsValue"
-                        mode="multiple"
-                        @change="handleEventsChange"
-                >
-                    <a-select-option v-for="eventTags in eventsList" :key="eventTags.value">
-                        {{ eventTags.name }}
-                    </a-select-option>
-                </a-select>
-            </label>
-
+            <div v-if="funcName === 'topicGroup'">
+                <label class="classification">一级分类:
+                    <a-select
+                            class="selector"
+                            :max-tag-count=1
+                            :max-tag-text-length="5"
+                            max-tag-placeholder="+"
+                            :value="level1Value"
+                            mode="multiple"
+                            @change="handleLevel1Change"
+                    >
+                        <a-select-option v-for="levelOneTags in level1" :key="levelOneTags.value">
+                            {{ levelOneTags.name }}
+                        </a-select-option>
+                    </a-select>
+                </label>
+                <label class="classification">二级分类:
+                    <a-select
+                            class="selector"
+                            :max-tag-count=1
+                            :max-tag-text-length="5"
+                            max-tag-placeholder="+"
+                            :value="level2Value"
+                            mode="multiple"
+                            @change="handleLevel2Change"
+                    >
+                        <a-select-option v-for="levelTwoTags in level2" :key="levelTwoTags.value">
+                            {{ levelTwoTags.name }}
+                        </a-select-option>
+                    </a-select>
+                </label>
+            </div>
+            <div v-if="funcName === 'wbTopic'">
+                <label class="classification">项目标签:
+                    <a-select
+                            class="selector"
+                            :value="level1Value"
+                            @change="handleLevel1Change"
+                    >
+                        <a-select-option v-for="levelOneTags in level1" :key="levelOneTags.value">
+                            {{ levelOneTags.name }}
+                        </a-select-option>
+                    </a-select>
+                </label>
+            </div>
+            <div v-if="funcName === 'topicHort'">
+                <label class="classification">微博话题:
+                    <a-select
+                            class="selector"
+                            :value="level1Value"
+                            @change="handleLevel1Change"
+                    >
+                        <a-select-option v-for="levelOneTags in level1" :key="levelOneTags.value">
+                            {{ levelOneTags.name }}
+                        </a-select-option>
+                    </a-select>
+                </label>
+            </div>
+            <div v-if="funcName === 'versionInfo'">
+                <label class="classification">版本号:
+                    <a-select
+                            class="selector"
+                            :value="level1Value"
+                            @change="handleLevel1Change"
+                    >
+                        <a-select-option v-for="levelOneTags in level1" :key="levelOneTags.value">
+                            {{ levelOneTags.name }}
+                        </a-select-option>
+                    </a-select>
+                </label>
+            </div>
         </div>
         <div class="charts">
-            <PublicCharts :options="viewOption" @xAxisValue="handleXClick"></PublicCharts>
+            <PublicCharts :options="viewOption"></PublicCharts>
         </div>
 
     </div>
 </template>
 
 <script>
-  import {getLevel, overView,} from "../utils/api";
+  import {getLevel, weibo} from "../utils/api";
   import moment from 'moment';
   import PublicCharts from "../components/PublicCharts";
 
   const colorLine = ["#ff671f", "#9b26b6", "#00a9ce", "#548235", "#000000"]
   const colorBar = ["#4e54c8", "#CAC531"]
-  const charsData = require('../utils/charsData.json')
-
   export default {
-    name: "Visualization",
+    name: "VisualiLOL",
     data() {
       return {
+        funcMenu: [
+          {
+            name: "舆情走势状况",
+            value: "topicCate"
+          }, {
+            name: "舆情观点分布统计",
+            value: "topicGroup"
+          }, {
+            name: "项目舆情状况",
+            value: "wbTopic"
+          }, {
+            name: "微博热度走势",
+            value: "topicHort"
+          }, {
+            name: "游戏版本舆情",
+            value: "versionInfo"
+          }
+        ],
         level1: [],
         level2: [],
         level3: [],
-        eventsList: [],
         level1Value: [],
         level2Value: [],
         level3Value: [],
-        eventsValue: [],
+        funcName: 'topicCate',
         dateFormat: 'YYYY/MM/DD',
         pickerDate: [],
         viewOption: {
           title: {
-            text: '各项目声量及非负占比变化图',
-            x: 'center',
-            padding: [5, 10],
+            text: '' ,
+            x: 'center'
           },
           tooltip: {
-            formatter: null, //折线图显示百分号
+            formatter: '{b0}<br /> {a0}:{c0}<br />{a1}: {c1}%<br /> {a2}:{c2}%<br />{a3}: {c3}%',
             trigger: 'axis', //鼠标移动到列x轴时同时展示所有列数值
           },
           dataZoom: {
@@ -122,17 +206,15 @@
             end: 100
           },
           xAxis: {
-            type: 'category',
-            triggerEvent: true,
             data: [],
             axisLabel: {
               interval: 0,
-              rotate: 90,
+              //旋转90度显示
+              rotate:90,
               fontSize: 14
             }
-
           },
-
+          // yAxis: {},
           yAxis: [
             {
               name: '声量',
@@ -142,13 +224,13 @@
               }
             },
             {
-              name: '非负占比',
+              name: '指标值',
               type: 'value',
               splitLine: {     //网格线
                 show: false
               },
-              axisLabel: {
-                formatter: '{value} %' //列数据显示百分号
+              axisLabel:{
+                formatter:'{value} %' //列数据显示百分号
               },
             }
           ],
@@ -157,30 +239,55 @@
               name: '声量',
               type: 'bar',
               itemStyle: {
-                // color: '#DEB887'
-                color: colorBar[0]
+                // color: '#DEB887',
+                color: colorBar[1]
               },
               yAxisIndex: 0,
               data: [],
-
             },
             {
               name: '非负占比',
               type: 'line',
-              // symbol: 'none', //圆点
+              symbol: 'none', //圆点
               itemStyle: {
-                normal: {
+                normal:{
                   // color: '#63B8FF',
-                  color: colorLine[0],
-                  width: 3
+                  color: colorLine[1],
+                  width:3
+                }
+              },
+              yAxisIndex: 1,
+              data: [],
+            },
+            {
+              name: '舆情可控度',
+              type: 'line',
+              symbol: 'none', //圆点
+              itemStyle: {
+                normal:{
+                  // color: '#ff5500',
+                  color: colorLine[2],
+                  width:3
+                }
+              },
+              yAxisIndex: 1,
+              data: [],
+            },
+            {
+              name: '舆情敏感度',
+              type: 'line',
+              symbol: 'none', //圆点
+              itemStyle: {
+                normal:{
+                  // color: '#ffff00',
+                  color: colorLine[3],
+                  width:3
                 }
               },
               yAxisIndex: 1,
               data: [],
             }
-
           ],
-
           //坐标指示
           axisPointer: {
             show: true,
@@ -189,10 +296,10 @@
           //防止文体太长无法完全显示
           grid: {
             left: '10%',
-            bottom: '35%'
+            bottom:'35%'
           },
           legend: {
-            data: ['声量', '非负占比'],
+            data: ['声量', '非负占比', '舆情可控度', '舆情敏感度'],
             top: "4%"
           }
         }
@@ -200,8 +307,11 @@
     },
     components: {PublicCharts},
     created() {
-      this.pickerDate = [this.getDay(-140), this.getDay(0)]
-      this.getL1()
+      this.pickerDate = [this.getDay(-360), this.getDay(0)]
+      switch (this.funcName) {
+        case 'topicCate':this.getL1();
+      }
+
     },
     computed: {
       defaultPicker() {
@@ -215,7 +325,9 @@
       },
       handlePicker(date, dateString) {
         this.pickerDate = dateString
-        this.getEvents()
+      },
+      handlefuncNameChange(val) {
+        this.funcName = val
       },
       handleLevel1Change(val) {
         this.level1Value = val
@@ -227,16 +339,12 @@
       },
       handleLevel3Change(val) {
         this.level3Value = val
-        this.getEvents()
-      },
-      handleEventsChange(val){
-        this.eventsValue = val
-        this.getViewData()
+
       },
       getL1(arr) {
         const param = {
           cateLevel: "1",
-          cateType: "yqOverview"
+          cateType: "weiboPlate"
         }
         getLevel(param).then(res => {
           this.level1 = res.data
@@ -248,7 +356,7 @@
         const param = {
           cateLevel: "2",
           cateParent: arr || this.level1Value,
-          cateType: "yqOverview"
+          cateType: "weiboPlate"
         }
         getLevel(param).then(res => {
           this.level2 = res.data
@@ -260,68 +368,33 @@
         const param = {
           cateLevel: "3",
           cateParent: arr || this.level2Value,
-          cateType: "yqOverview"
+          cateType: "weiboPlate"
         }
         getLevel(param).then(res => {
           this.level3 = res.data
           this.level3Value = res.data.map(i => i.value)
-          this.getEvents()
-        })
-      },
-      // 获取事件列表
-      getEvents() {
-        const param = {
-          argName: "yqOverview",
-          cateFirst: this.level1Value,
-          cateSecond: this.level2Value,
-          cateThird: this.level3Value,
-          edate: this.pickerDate[1],
-          sdate: this.pickerDate[0],
-          types: 0
-        }
-        overView(param).then(res => {
-          this.eventsList = res.data
-          this.eventsValue = res.data.map(i => i.value)
           this.getViewData()
         })
       },
+
       //获取视图数据
       getViewData() {
         const param = {
-          argName: "yqOverview",
+          argName: "weiboPlate",
           cateFirst: this.level1Value,
           cateSecond: this.level2Value,
           cateThird: this.level3Value,
-          eventName: this.eventsValue,
+          mod: "date",
           edate: this.pickerDate[1],
           sdate: this.pickerDate[0],
-          types: 1
+          types: "topicCate"
         }
-        overView(param).then(res => {
-          this.viewOption.xAxis.data = res.data.bar_x1
-          this.viewOption.series[0].data = res.data.voice_num
+        weibo(param).then(res => {
+          this.viewOption.xAxis.data = res.data.x_data
+          this.viewOption.series[0].data = res.data.sl
           this.viewOption.series[1].data = res.data.no_rate
-          this.viewOption.tooltip.formatter = (params) => {
-            let a = params[0];
-            let b = params[1];
-            return (`${a['name']}</br>${a['seriesName']}: ${a['value']}</br>${b['seriesName']}: ${b['value']}%</br>事件描述: ${res.data.event_desc[a['dataIndex']]}`)
-          }
-        })
-      },
-        //点击跳转
-      handleXClick(val){
-        const param = {
-          argName: "yqOverview",
-          cateFirst: this.level1Value,
-          cateSecond: this.level2Value,
-          cateThird: this.level3Value,
-          edate: this.pickerDate[1],
-          sdate: this.pickerDate[0],
-          report:val,
-          types: 2
-        }
-        overView(param).then(res => {
-          window.open(res.data ,'target')
+          this.viewOption.series[2].data = res.data.con_rate
+          this.viewOption.series[3].data = res.data.sen_rate
         })
       },
       getDay(day) {
@@ -362,9 +435,6 @@
 
     .selector {
         width: 170px;
-        height: 32px;
-        overflow: hidden;
-        vertical-align: middle;
     }
 
     .classification {

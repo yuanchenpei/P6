@@ -12,10 +12,10 @@
                         </a>
                         <a-menu slot="overlay">
                             <a-menu-item>
-                                <router-link to="/login">切换账号</router-link>
+                                <div @click="logout">切换账号</div>
                             </a-menu-item>
                             <a-menu-item>
-                                <router-link to="/login">退出登录</router-link>
+                                <div @click="logout">退出登录</div>
                             </a-menu-item>
                         </a-menu>
                     </a-dropdown>
@@ -48,7 +48,8 @@
           {
             name: '功能菜单', type: "CC",
             children: [
-              {name: '舆情可视化', path: 'visualization'},
+              {name: '舆情总览', path: 'visualization'},
+              {name: '官方微博舆情', path: 'visualilol'},
               {name: '舆情总览数据管理', path: 'publicOpinion'},
               {name: '平台微博数据管理', path: 'weibo'},
               {name: '舆情总览Excel', path: 'publicOpinionExcel'},
@@ -71,7 +72,12 @@
     components: {
       sideBar
     },
-    methods: {}
+    methods: {
+      logout(){
+        sessionStorage.clear()
+        this.$router.push('/login')
+      }
+    }
   }
 </script>
 <style scoped lang="less">

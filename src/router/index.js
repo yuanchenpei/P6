@@ -16,6 +16,11 @@ const routes = [
         component: () => import('../views/Visualization.vue'),
       },
       {
+        path: 'visualilol',
+        name: 'VisualiLOL',
+        component: () => import('../views/VisualiLOL.vue'),
+      },
+      {
         path: 'weibo',
         name: 'Weibo',
         component: () => import('../views/Weibo.vue'),
@@ -59,6 +64,12 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = sessionStorage.getItem('token')
+  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+  else next()
 })
 
 export default router

@@ -2,10 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-// 图表
-import Histogram from 'v-charts/lib/histogram.common'
+import ECharts from 'vue-echarts'
 
-Vue.component(Histogram.name, Histogram)
+Vue.component('v-chart', ECharts)
 
 import {
   Button, Spin, FormModel, Input, Icon, Checkbox, Menu,

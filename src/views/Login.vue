@@ -3,7 +3,7 @@
         <canvas id="background" width="913" height="789"></canvas>
         <div class="login-window">
             <h4 class="title">舆情管理系统</h4>
-            <a-form-model layout="inline" :model="formInline" @submit="handleSubmit" @submit.native.prevent>
+            <a-form-model layout="inline" :model="formInline" @keyup.enter.native="handleSubmit" @submit="handleSubmit" @submit.native.prevent>
                 <a-input v-model="formInline.user" placeholder="用户名">
                     <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)"/>
                 </a-input>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  import {login, initAdmin} from "../utils/api";
   import {bg} from "../utils/bg"
 
   export default {
@@ -37,13 +38,28 @@
         },
       }
     },
-
+    beforeCreate() {
+      initAdmin()
+    },
     mounted() {
       bg()
     },
     methods: {
       handleSubmit() {
-        this.$router.push('/')
+        const param = {
+          username: this.formInline.user,
+          password: this.formInline.password,
+        }
+        login(param).then(res => {
+          if (res.code == 0) {
+            sessionStorage.token = res.token;
+            sessionStorage.user_id = res.user_id;
+            sessionStorage.username = res.username;
+            this.$router.push('/')
+          } else {
+            this.$message.error(res.message)
+          }
+        })
       },
     }
   }
