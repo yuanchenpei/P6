@@ -5,8 +5,8 @@
                 <label class="classification">功能选择:
                     <a-select
                             class="selector"
-                            :value="funcName"
-                            @change="handlefuncNameChange"
+                            :value="funcValue"
+                            @select="handlefuncValueSelect"
                     >
                         <a-select-option v-for="levelOneTags in funcMenu" :key="levelOneTags.value">
                             {{ levelOneTags.name }}
@@ -25,7 +25,7 @@
                     />
                 </label>
             </div>
-            <div v-if="funcName === 'topicCate'">
+            <div v-if="funcValue === 'topicCate'">
                 <label class="classification">一级分类:
                     <a-select
                             class="selector"
@@ -72,7 +72,7 @@
                     </a-select>
                 </label>
             </div>
-            <div v-if="funcName === 'topicGroup'">
+            <div v-if="funcValue === 'topicGroup'">
                 <label class="classification">一级分类:
                     <a-select
                             class="selector"
@@ -104,41 +104,53 @@
                     </a-select>
                 </label>
             </div>
-            <div v-if="funcName === 'wbTopic'">
+            <div v-if="funcValue === 'wbTopic'">
                 <label class="classification">项目标签:
                     <a-select
                             class="selector"
-                            :value="level1Value"
+                            :max-tag-count=1
+                            :max-tag-text-length="5"
+                            max-tag-placeholder="+"
+                            :value="topLabelValue"
+                            mode="multiple"
                             @change="handleLevel1Change"
                     >
-                        <a-select-option v-for="levelOneTags in level1" :key="levelOneTags.value">
-                            {{ levelOneTags.name }}
+                        <a-select-option v-for="labelTags in topLabel" :key="labelTags.value">
+                            {{ labelTags.name }}
                         </a-select-option>
                     </a-select>
                 </label>
             </div>
-            <div v-if="funcName === 'topicHort'">
+            <div v-if="funcValue === 'topicHort'">
                 <label class="classification">微博话题:
                     <a-select
                             class="selector"
-                            :value="level1Value"
+                            :max-tag-count=1
+                            :max-tag-text-length="5"
+                            max-tag-placeholder="+"
+                            mode="multiple"
+                            :value="wbTopicValue"
                             @change="handleLevel1Change"
                     >
-                        <a-select-option v-for="levelOneTags in level1" :key="levelOneTags.value">
-                            {{ levelOneTags.name }}
+                        <a-select-option v-for="wbTopicTags in wbTopic" :key="wbTopicTags.value">
+                            {{ wbTopicTags.name }}
                         </a-select-option>
                     </a-select>
                 </label>
             </div>
-            <div v-if="funcName === 'versionInfo'">
+            <div v-if="funcValue === 'versionInfo'">
                 <label class="classification">版本号:
                     <a-select
                             class="selector"
-                            :value="level1Value"
+                            :max-tag-count=1
+                            :max-tag-text-length="5"
+                            max-tag-placeholder="+"
+                            mode="multiple"
+                            :value="verListValue"
                             @change="handleLevel1Change"
                     >
-                        <a-select-option v-for="levelOneTags in level1" :key="levelOneTags.value">
-                            {{ levelOneTags.name }}
+                        <a-select-option v-for="verListTags in verList" :key="verListTags.value">
+                            {{ verListTags.name }}
                         </a-select-option>
                     </a-select>
                 </label>
@@ -186,12 +198,16 @@
         level1Value: [],
         level2Value: [],
         level3Value: [],
-        funcName: 'topicCate',
+        topLabelValue: [],
+        wbTopicValue: [],
+        verListValue: [],
+        funcValue: 'topicCate',
+        funcName: '舆情走势状况',
         dateFormat: 'YYYY/MM/DD',
         pickerDate: [],
         viewOption: {
           title: {
-            text: '' ,
+            text: '',
             x: 'center'
           },
           tooltip: {
@@ -210,7 +226,7 @@
             axisLabel: {
               interval: 0,
               //旋转90度显示
-              rotate:90,
+              rotate: 90,
               fontSize: 14
             }
           },
@@ -229,14 +245,14 @@
               splitLine: {     //网格线
                 show: false
               },
-              axisLabel:{
-                formatter:'{value} %' //列数据显示百分号
+              axisLabel: {
+                formatter: '{value} %' //列数据显示百分号
               },
             }
           ],
           series: [
             {
-              name: '声量',
+              name: '量级',
               type: 'bar',
               itemStyle: {
                 // color: '#DEB887',
@@ -250,10 +266,10 @@
               type: 'line',
               symbol: 'none', //圆点
               itemStyle: {
-                normal:{
+                normal: {
                   // color: '#63B8FF',
                   color: colorLine[1],
-                  width:3
+                  width: 3
                 }
               },
               yAxisIndex: 1,
@@ -264,10 +280,10 @@
               type: 'line',
               symbol: 'none', //圆点
               itemStyle: {
-                normal:{
+                normal: {
                   // color: '#ff5500',
                   color: colorLine[2],
-                  width:3
+                  width: 3
                 }
               },
               yAxisIndex: 1,
@@ -278,10 +294,10 @@
               type: 'line',
               symbol: 'none', //圆点
               itemStyle: {
-                normal:{
+                normal: {
                   // color: '#ffff00',
                   color: colorLine[3],
-                  width:3
+                  width: 3
                 }
               },
               yAxisIndex: 1,
@@ -296,10 +312,10 @@
           //防止文体太长无法完全显示
           grid: {
             left: '10%',
-            bottom:'35%'
+            bottom: '35%'
           },
           legend: {
-            data: ['声量', '非负占比', '舆情可控度', '舆情敏感度'],
+            data: ['量级', '非负占比', '舆情可控度', '舆情敏感度'],
             top: "4%"
           }
         }
@@ -308,15 +324,17 @@
     components: {PublicCharts},
     created() {
       this.pickerDate = [this.getDay(-360), this.getDay(0)]
-      switch (this.funcName) {
-        case 'topicCate':this.getL1();
+      switch (this.funcValue) {
+        case 'topicCate':
+          this.getL1()
+          break;
       }
-
+      this.getList()
     },
     computed: {
       defaultPicker() {
         return this.pickerDate.map(i => this.moment(i, this.dateFormat))
-      }
+      },
     },
     methods: {
       moment,
@@ -326,8 +344,27 @@
       handlePicker(date, dateString) {
         this.pickerDate = dateString
       },
-      handlefuncNameChange(val) {
-        this.funcName = val
+      handlefuncValueSelect(val) {
+        this.funcValue = val
+        this.funcMenu.map(item => {
+          if (item.value == this.funcValue) {
+            this.funcName = item.name
+          }
+        })
+        this.getViewData()
+        switch (val) {
+          case 'topicHort':
+            const option = {...this.viewOption}
+            this.viewOption.yAxis[0].name = '评论量'
+            this.viewOption.yAxis[1].name = '点赞量'
+            this.viewOption.series[0].type = 'line'
+            break;
+          default :
+            this.viewOption.series[0].type = 'bar'
+            this.viewOption.yAxis[0].name = '声量'
+            this.viewOption.yAxis[1].name = '指标值'
+
+        }
       },
       handleLevel1Change(val) {
         this.level1Value = val
@@ -376,27 +413,106 @@
           this.getViewData()
         })
       },
-
-      //获取视图数据
-      getViewData() {
+      //获取列表
+      getList() {
+        this.getTopLabel()
+        this.getWbTopic()
+        this.getVerList()
+      },
+      // 获取项目标签
+      getTopLabel() {
         const param = {
           argName: "weiboPlate",
-          cateFirst: this.level1Value,
-          cateSecond: this.level2Value,
-          cateThird: this.level3Value,
           mod: "date",
           edate: this.pickerDate[1],
           sdate: this.pickerDate[0],
-          types: "topicCate"
+          types: "getTopLabel"
+        }
+        weibo(param).then(res => {
+          this.topLabel = res.data
+          this.topLabelValue = res.data.map(i => i.value)
+        })
+      },
+      // 获取微博话题
+      getWbTopic() {
+        const param = {
+          argName: "weiboPlate",
+          mod: "date",
+          edate: this.pickerDate[1],
+          sdate: this.pickerDate[0],
+          types: "getWbTopic"
+        }
+        weibo(param).then(res => {
+          this.wbTopic = res.data
+          this.wbTopicValue = res.data.map(i => i.value)
+        })
+      },
+      // 获取版本列表
+      getVerList() {
+        const param = {
+          argName: "weiboPlate",
+          mod: "date",
+          edate: this.pickerDate[1],
+          sdate: this.pickerDate[0],
+          types: "getVerList"
+        }
+        weibo(param).then(res => {
+          this.verList = res.data
+          this.verListValue = res.data.map(i => i.value)
+        })
+      },
+      //获取视图数据
+      getViewData() {
+        let param = {
+          argName: "weiboPlate",
+          mod: "date",
+          edate: this.pickerDate[1],
+          sdate: this.pickerDate[0],
+        }
+        switch (this.funcValue) {
+          case 'topicCate':
+            param.cateFirst = this.level1Value
+            param.cateSecond = this.level2Value
+            param.cateThird = this.level3Value
+            param.types = "topicCate"
+            break;
+          case 'topicGroup':
+            param.cateFirst = this.level1Value
+            param.types = "topicGroup"
+            break;
+          case 'wbTopic':
+            param.topLabel = this.topLabelValue
+            param.types = "wbTopic"
+            break;
+          case 'topicHort':
+            param.topHot = this.wbTopicValue
+            param.types = "topicHort"
+            break;
+          case 'versionInfo':
+            param.topVer = this.verListValue
+            param.types = "versionInfo"
+            break;
+        }
+        if (this.funcValue === 'topicCate') {
+          param.cateSecond = this.level2Value
+          param.cateThird = this.level3Value
+          param.types = "topicCate"
         }
         weibo(param).then(res => {
           this.viewOption.xAxis.data = res.data.x_data
-          this.viewOption.series[0].data = res.data.sl
-          this.viewOption.series[1].data = res.data.no_rate
-          this.viewOption.series[2].data = res.data.con_rate
-          this.viewOption.series[3].data = res.data.sen_rate
+          this.viewOption.title.text = this.funcName
+          if (this.funcValue === 'topicHort') {
+            this.viewOption.series[0].data = res.data.pinglun
+            this.viewOption.series[1].data = res.data.dianzan
+          } else {
+            this.viewOption.series[0].data = res.data.sl
+            this.viewOption.series[1].data = res.data.no_rate
+            this.viewOption.series[2].data = res.data.con_rate
+            this.viewOption.series[3].data = res.data.sen_rate
+          }
         })
-      },
+      }
+      ,
       getDay(day) {
         let today = new Date();
         today.setDate(today.getDate() + day);
@@ -435,6 +551,9 @@
 
     .selector {
         width: 170px;
+        height: 32px;
+        overflow: hidden;
+        vertical-align: middle;
     }
 
     .classification {
