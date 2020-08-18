@@ -9,7 +9,7 @@ Vue.component('v-chart', ECharts)
 import {
   Button, Spin, FormModel, Input, Icon, Checkbox, Menu,
   Layout, Col, Row, Select, Table, DatePicker, Dropdown, Avatar,
-  ConfigProvider, Upload, Modal, message,
+  ConfigProvider, Upload, Modal, message, Pagination
 } from 'ant-design-vue';
 
 Vue.component(Layout.name, Layout)
@@ -33,6 +33,7 @@ Vue.component(Row.name, Row)
 Vue.component(Select.name, Select)
 Vue.component(Select.Option.name, Select.Option)
 Vue.component(Table.name, Table)
+Vue.component(Pagination.name, Pagination)
 Vue.component(DatePicker.name, DatePicker)
 Vue.component(DatePicker.RangePicker.name, DatePicker.RangePicker)
 Vue.component(Dropdown.name, Dropdown)

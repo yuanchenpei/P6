@@ -28,7 +28,7 @@ instance.interceptors.request.use(config => {
     config.headers['withCredentials'] = true
     // message.loading('',0)
     // 我这里是文件上传，发送的是二进制流，所以需要设置请求头的'Content-Type'
-    if (config.url.includes('pur/contract/upload')) {
+    if (config.url.includes('/yuqing/upload_zl/')) {
         config.headers['Content-Type'] = 'multipart/form-data'
     }
     return config
@@ -85,6 +85,36 @@ export const post = (url, data, config = {}) => {
     return new Promise((resolve, reject) => {
         instance({
             method: 'post',
+            url,
+            data,
+            ...config
+        }).then(response => {
+            resolve(response)
+        }).catch(error => {
+            reject(error)
+        })
+    })
+}
+/* 统一封装put请求  */
+export const put = (url, data, config = {}) => {
+    return new Promise((resolve, reject) => {
+        instance({
+            method: 'put',
+            url,
+            data,
+            ...config
+        }).then(response => {
+            resolve(response)
+        }).catch(error => {
+            reject(error)
+        })
+    })
+}
+/* 统一封装put请求  */
+export const del = (url, data, config = {}) => {
+    return new Promise((resolve, reject) => {
+        instance({
+            method: 'delete',
             url,
             data,
             ...config
