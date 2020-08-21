@@ -164,7 +164,7 @@
 </template>
 
 <script>
-import {getLevel, weibo} from "../utils/api";
+import {getLevel, weibo} from "@/utils/api";
 import moment from 'moment';
 import PublicCharts from "../components/PublicCharts";
 
@@ -347,7 +347,7 @@ export default {
     handlefuncValueSelect(val) {
       this.funcValue = val
       this.funcMenu.map(item => {
-        if (item.value == this.funcValue) {
+        if (item.value === this.funcValue) {
           this.funcName = item.name
         }
       })
@@ -388,8 +388,9 @@ export default {
         cateType: "weiboPlate"
       }
       getLevel(param).then(res => {
-        this.level1 = res.data
-        this.level1Value = res.data.map(i => i.value)
+        let resData = res.data || []
+        this.level1 = resData
+        this.level1Value = resData.map(i => i.value)
         this.getL2()
       })
     },
@@ -400,8 +401,9 @@ export default {
         cateType: "weiboPlate"
       }
       getLevel(param).then(res => {
-        this.level2 = res.data
-        this.level2Value = res.data.map(i => i.value)
+        let resData = res.data || []
+        this.level2 = resData
+        this.level2Value = resData.map(i => i.value)
         this.getL3()
       })
     },
@@ -412,8 +414,9 @@ export default {
         cateType: "weiboPlate"
       }
       getLevel(param).then(res => {
-        this.level3 = res.data
-        this.level3Value = res.data.map(i => i.value)
+        let resData = res.data || []
+        this.level3 = resData
+        this.level3Value = resData.map(i => i.value)
         this.getViewData()
       })
     },
