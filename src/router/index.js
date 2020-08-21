@@ -45,7 +45,11 @@ const routes = [
         name: 'ChangePassWord',
         component: () => import('../views/ChangePassWord.vue'),
       },
-
+      {
+        path: 'paramsTable',
+        name: 'ParamsTable',
+        component: () => import('../views/ParamsTable.vue'),
+      },
     ]
   },
   {

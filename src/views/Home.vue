@@ -65,7 +65,7 @@
           {name: '用户管理', type: "AA", path: 'ss'},
           {name: '角色管理', type: 'BB', path: 'dd'},
           {name: '产品管理', type: 'EE', path: 'qq'},
-          {name: '参数表维护', type: 'FF', path: 'pp'},
+          {name: '参数表维护', type: 'FF', path: 'paramsTable'},
         ]
       }
     },
