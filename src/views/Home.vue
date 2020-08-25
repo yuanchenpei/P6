@@ -62,9 +62,9 @@
               {name: '密码修改', path: 'changePassWord'}
             ]
           },
-          {name: '用户管理', type: "AA", path: 'ss'},
-          {name: '角色管理', type: 'BB', path: 'dd'},
-          {name: '产品管理', type: 'EE', path: 'qq'},
+          {name: '用户管理', type: "AA", path: 'userManage'},
+          // {name: '角色管理', type: 'BB', path: 'dd'},
+          {name: '产品管理', type: 'EE', path: 'product'},
           {name: '参数表维护', type: 'FF', path: 'paramsTable'},
         ]
       }

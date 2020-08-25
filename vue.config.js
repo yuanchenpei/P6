@@ -17,7 +17,7 @@ module.exports = {
         host: '0.0.0.0',
         proxy: {
             '/api': {
-                target: "http://127.0.0.1:9000", // 后台接口域名
+                target: "http://10.0.7.109:9000", // 后台接口域名
                 ws: true, //如果要代理 websockets，配置这个参数
                 changOrigin: true, //是否跨域
                 pathRewrite: { "^/api": "" }

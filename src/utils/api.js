@@ -7,7 +7,7 @@ export const login = (params) => post('/user/login/', params)
 export const initAdmin = (params) => get('/user/login/', params)
 
 //获取分类列表
-export const getLevel = (params) => post('/yuqing/param', params)
+export const getLevel = (params) => post('/argment/param', params)
 //获取舆情
 export const overView = (params) => post('/yuqing/overview', params)
 //获取微博舆情
@@ -47,3 +47,23 @@ export const downLoadFile = (params) => post('/yuqing/download/', params,{
 
 //上传微博文件
 export const upLoadWeboFile = (params) => post('/yuqing/upload_wb/', params)
+
+//获取参数表
+export const getArgments = (params) => get('/argment/', params)
+//获取参数表
+export const argment = (params) => post('/argment/', params)
+//删除参数
+export const delArgment = (params) => del('/argment/'+params+'/')
+//更新参数
+export const updateArgment = (params , data) => put('/argment/'+params+'/',data)
+
+//获取参数表
+export const getChildren = (params) => get('/argment/'+params+'/')
+
+
+//获取产品列表
+export const getProduct = (params) => get('/product/', params)
+
+
+//获取用户
+export const getUser = (params) => get('/usermanage/', params)

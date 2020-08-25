@@ -40,7 +40,7 @@ instance.interceptors.request.use(config => {
 /** 响应拦截器  **/
 instance.interceptors.response.use(response => {
     message.destroy()
-    if (response.status === 200) {     // 响应结果里的status: ok是我与后台的约定，大家可以根据实际情况去做对应的判断
+    if (response.status === 200 || response.status === 201 || response.status === 204) {     // 响应结果里的status: ok是我与后台的约定，大家可以根据实际情况去做对应的判断
         return Promise.resolve(response.data)
     } else {
         message.error(response.data.message)
@@ -110,7 +110,7 @@ export const put = (url, data, config = {}) => {
         })
     })
 }
-/* 统一封装put请求  */
+/* 统一封装delete请求  */
 export const del = (url, data, config = {}) => {
     return new Promise((resolve, reject) => {
         instance({

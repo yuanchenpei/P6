@@ -50,6 +50,16 @@ const routes = [
         name: 'ParamsTable',
         component: () => import('../views/ParamsTable.vue'),
       },
+      {
+        path: 'userManage',
+        name: 'UserManage',
+        component: () => import('../views/UserManage.vue'),
+      },
+      {
+        path: 'product',
+        name: 'Product',
+        component: () => import('../views/Product.vue'),
+      },
     ]
   },
   {
