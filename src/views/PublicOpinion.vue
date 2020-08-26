@@ -30,7 +30,7 @@
           :data-source="datas"
           :pagination='pagination'
           row-key="id"
-          :scroll="{ x: 2000, y: 550}"
+          :scroll="{ x: 2000, y:620}"
       >
         <div slot="action" slot-scope="text,record" class="action">
           <a-button @click="editItem(record)" shape="circle" class="btn" icon="edit" type="primary"

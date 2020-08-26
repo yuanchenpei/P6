@@ -9,7 +9,7 @@ Vue.component('v-chart', ECharts)
 import {
   Button, Spin, FormModel, Input, Icon, Checkbox, Menu,
   Layout, Col, Row, Select, Table, DatePicker, Dropdown, Avatar,
-  ConfigProvider, Upload, Modal, message, Pagination,Tree
+  ConfigProvider, Upload, Modal, message, Pagination,Tree, Switch
 } from 'ant-design-vue';
 
 Vue.component(Layout.name, Layout)
@@ -42,6 +42,8 @@ Vue.component(ConfigProvider.name, ConfigProvider)
 Vue.component(Upload.name, Upload)
 Vue.component(Modal.confirm.name, Modal.confirm)
 Vue.component(Tree.name, Tree)
+Vue.component(Switch.name, Switch)
+
 
 Vue.use(Modal)
 
