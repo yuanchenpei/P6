@@ -7,7 +7,7 @@ import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
 import {
-  Button, Spin, FormModel, Input, Icon, Checkbox, Menu,
+  Button, Spin,Form, FormModel, Input, Icon, Checkbox, Menu,
   Layout, Col, Row, Select, Table, DatePicker, Dropdown, Avatar,
   ConfigProvider, Upload, Modal, message, Pagination,Tree, Switch
 } from 'ant-design-vue';
@@ -18,10 +18,12 @@ Vue.component(Layout.Content.name, Layout.Content)
 Vue.component(Layout.Header.name, Layout.Header)
 Vue.component(Button.name, Button)
 Vue.component(Spin.name, Spin)
+Vue.component(Form.name, Form)
 Vue.component(FormModel.name, FormModel.Item)
 Vue.component(FormModel.Item.name, FormModel.Item)
 Vue.component(Input.name, Input)
 Vue.component(Input.Search.name, Input.Search)
+Vue.component(Input.Password.name, Input.Password)
 Vue.component(Input.TextArea.name, Input.TextArea)
 Vue.component(Icon.name, Icon)
 Vue.component(Checkbox.name, Checkbox)

@@ -60,7 +60,7 @@
             </a-col>
           </a-row>
           <a-row>
-            <a-button class="formBtn">保存</a-button>
+            <a-button class="formBtn" @click="saveChange('info')">保存</a-button>
           </a-row>
         </a-form-model>
         <div class="formBox">
@@ -268,8 +268,22 @@ export default {
       }
     },
     edit(data) {
-      this.editForm = data
+      const dataObj = JSON.parse(JSON.stringify(data))
+      this.editForm = dataObj
       this.editOnOff = true
+    },
+    saveChange(method){
+      if (!this.editForm.username) {
+        this.$message.error('用户名不能为空')
+        return
+      }
+      editUser(
+          this.editForm.id,
+          method,
+          this.editForm
+      ).then(res => {
+        this.getUserData()
+      })
     },
     handlChange(method) {
       editUser(

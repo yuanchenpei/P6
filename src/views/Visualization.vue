@@ -102,7 +102,7 @@ export default {
       level2Value: [],
       level3Value: [],
       eventsValue: [],
-      dateFormat: 'YYYY/MM/DD',
+      dateFormat: 'YYYY-MM-DD',
       pickerDate: [],
       viewOption: {
         title: {

@@ -5,6 +5,8 @@ import {get, post, put, del} from '@/utils/request'
 export const login = (params) => post('/user/login/', params)
 //init
 export const initAdmin = (params) => get('/user/login/', params)
+//修改密码
+export const editPass = (params) => put('/user/edit/', params)
 
 //获取分类列表
 export const getLevel = (params) => post('/argment/param', params)
@@ -64,6 +66,12 @@ export const getChildren = (params) => get('/argment/' + params + '/')
 
 //获取产品列表
 export const getProduct = (params) => get('/product/', params)
+//添加产品
+export const addProduct = (params) => post('/product/', params)
+//删除产品
+export const delProduct = (params) => del(`/product/${params}/`)
+//编辑产品
+export const putProduct = (id, params) => put(`/product/${id}/`, params)
 
 
 //获取用户

@@ -12,7 +12,7 @@
               :value="dataItem.dataDate"
               type="date"
               @change="_ => dataItem.dataDate = _"
-              format="YYYY/MM/DD"
+              format="YYYY-MM-DD"
               value-format="YYYY-MM-DD"
               placeholder="选择日期"
               style="width: 100%;"

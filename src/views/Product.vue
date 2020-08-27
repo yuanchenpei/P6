@@ -5,7 +5,7 @@
     </div>
     <div class="table-warp">
       <div class="tableBar">
-        <a-button class="btn" @click="">新增</a-button>
+        <a-button class="btn" @click="addProduct">新增</a-button>
       </div>
       <a-table
           class="tablebox"
@@ -20,29 +20,23 @@
         </div>
       </a-table>
     </div>
-    <a-modal v-model="editOnOff" title="编辑标签" width="500px">
-
+    <a-modal v-model="editOnOff" title="编辑产品" @ok="handleEdit" width="400px">
+      <a-form-model-item label="产品名称:" :label-col="{span: 6}" :wrapper-col="{span: 16}">
+        <a-input v-model="editProduct.name" allowClear></a-input>
+      </a-form-model-item>
     </a-modal>
-    <a-modal v-model="addOnOff" title="新增" @ok="" width="400px">
+    <a-modal v-model="addOnOff" title="新增" @ok="handleAdd" width="400px">
       <div class="addForm">
-        <a-form-model layout="horizontal">
-          <a-form-model-item label="产品名称:" :label-col="{span: 6}" :wrapper-col="{span: 16}">
-
-          </a-form-model-item>
-          <a-form-model-item label="板块名称:" :label-col="{span: 6}" :wrapper-col="{span: 16}">
-
-          </a-form-model-item>
-          <a-form-model-item label="分类名称:" :label-col="{span: 6}" :wrapper-col="{span: 16}">
-
-          </a-form-model-item>
-        </a-form-model>
+        <a-form-model-item label="产品名称:" :label-col="{span: 6}" :wrapper-col="{span: 16}">
+          <a-input v-model="addProductName" allowClear></a-input>
+        </a-form-model-item>
       </div>
     </a-modal>
   </div>
 </template>
 
 <script>
-import {getProduct} from "@/utils/api";
+import {addProduct, delProduct, getProduct, putProduct} from "@/utils/api";
 
 const columns = [
   {
@@ -88,17 +82,64 @@ export default {
         total: 0
       },
       addOnOff: false,
-      editOnOff: false
+      editOnOff: false,
+      addProductName: '',
+      editProduct: ''
     }
   },
   created() {
     this.getProductData()
   },
-  methods:{
-    getProductData(){
-      getProduct().then(res=>{
+  methods: {
+    getProductData() {
+      getProduct().then(res => {
         this.tabledata = res
       })
+    },
+    addProduct() {
+      this.addOnOff = true
+    },
+    handleAdd() {
+      if (!this.addProductName) {
+        this.$message.error('请输入产品名称')
+      } else {
+        addProduct({name: this.addProductName}).then(res => {
+          this.getProductData()
+          this.addOnOff = false
+        })
+      }
+    },
+    edit(data) {
+      const dataObj = JSON.parse(JSON.stringify(data))
+      this.editOnOff = true
+      this.editProduct = dataObj
+    },
+    handleEdit() {
+      if (!this.editProduct.name) {
+        this.$message.error('请输入产品名称')
+      } else {
+        putProduct(this.editProduct.id, {name: this.editProduct.name}).then(res => {
+          this.getProductData()
+          this.editOnOff = false
+        })
+      }
+    },
+    del(data) {
+      this.$confirm({
+        title: '确定删除此产品',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk: () => {
+          delProduct(data.id).then(res => {
+            this.$message.success(res.message)
+            this.getProductData()
+          })
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
     }
   }
 }

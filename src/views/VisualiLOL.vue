@@ -203,7 +203,7 @@ export default {
       verListValue: [],
       funcValue: 'topicCate',
       funcName: '舆情走势状况',
-      dateFormat: 'YYYY/MM/DD',
+      dateFormat: 'YYYY-MM-DD',
       pickerDate: [],
       viewOption: {
         title: {
