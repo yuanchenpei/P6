@@ -46,7 +46,7 @@
     },
     methods: {
       jumpTo(item) {
-        this.$router.push(item.path)
+        this.$router.push(item.path).catch(err => {})
       }
     },
     mounted() {

@@ -2,15 +2,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-// 图表
-import Histogram from 'v-charts/lib/histogram.common'
+import ECharts from 'vue-echarts'
 
-Vue.component(Histogram.name, Histogram)
+Vue.component('v-chart', ECharts)
 
 import {
-  Button, Spin, FormModel, Input, Icon, Checkbox, Menu,
+  Button, Spin,Form, FormModel, Input, Icon, Checkbox, Menu,
   Layout, Col, Row, Select, Table, DatePicker, Dropdown, Avatar,
-  ConfigProvider, Upload, Modal, message,
+  ConfigProvider, Upload, Modal, message, Pagination,Tree, Switch
 } from 'ant-design-vue';
 
 Vue.component(Layout.name, Layout)
@@ -19,10 +18,12 @@ Vue.component(Layout.Content.name, Layout.Content)
 Vue.component(Layout.Header.name, Layout.Header)
 Vue.component(Button.name, Button)
 Vue.component(Spin.name, Spin)
+Vue.component(Form.name, Form)
 Vue.component(FormModel.name, FormModel.Item)
 Vue.component(FormModel.Item.name, FormModel.Item)
 Vue.component(Input.name, Input)
 Vue.component(Input.Search.name, Input.Search)
+Vue.component(Input.Password.name, Input.Password)
 Vue.component(Input.TextArea.name, Input.TextArea)
 Vue.component(Icon.name, Icon)
 Vue.component(Checkbox.name, Checkbox)
@@ -34,6 +35,7 @@ Vue.component(Row.name, Row)
 Vue.component(Select.name, Select)
 Vue.component(Select.Option.name, Select.Option)
 Vue.component(Table.name, Table)
+Vue.component(Pagination.name, Pagination)
 Vue.component(DatePicker.name, DatePicker)
 Vue.component(DatePicker.RangePicker.name, DatePicker.RangePicker)
 Vue.component(Dropdown.name, Dropdown)
@@ -41,6 +43,9 @@ Vue.component(Avatar.name, Avatar)
 Vue.component(ConfigProvider.name, ConfigProvider)
 Vue.component(Upload.name, Upload)
 Vue.component(Modal.confirm.name, Modal.confirm)
+Vue.component(Tree.name, Tree)
+Vue.component(Switch.name, Switch)
+
 
 Vue.use(Modal)
 

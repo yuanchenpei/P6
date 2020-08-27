@@ -16,6 +16,11 @@ const routes = [
         component: () => import('../views/Visualization.vue'),
       },
       {
+        path: 'visualilol',
+        name: 'VisualiLOL',
+        component: () => import('../views/VisualiLOL.vue'),
+      },
+      {
         path: 'weibo',
         name: 'Weibo',
         component: () => import('../views/Weibo.vue'),
@@ -40,7 +45,21 @@ const routes = [
         name: 'ChangePassWord',
         component: () => import('../views/ChangePassWord.vue'),
       },
-
+      {
+        path: 'paramsTable',
+        name: 'ParamsTable',
+        component: () => import('../views/ParamsTable.vue'),
+      },
+      {
+        path: 'userManage',
+        name: 'UserManage',
+        component: () => import('../views/UserManage.vue'),
+      },
+      {
+        path: 'product',
+        name: 'Product',
+        component: () => import('../views/Product.vue'),
+      },
     ]
   },
   {
@@ -59,6 +78,12 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = sessionStorage.getItem('token')
+  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+  else next()
 })
 
 export default router
