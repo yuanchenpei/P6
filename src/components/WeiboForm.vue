@@ -166,9 +166,10 @@ export default {
         this.dataItem = newVal
         this.getL2([this.dataItem.cate1])
         this.getL3([this.dataItem.cate2])
-      }
+      },
+      deep: true
     },
-    deep: true
+
   },
   created() {
     this.getL1()
